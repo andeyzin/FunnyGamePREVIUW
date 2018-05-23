@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/cv"
+    android:background="#d4ffe1"
     >
 
     <RelativeLayout
@@ -27,7 +28,7 @@
             android:id="@+id/video_title"
             android:layout_toRightOf="@+id/video_preview"
             android:layout_alignParentTop="true"
-            android:textSize="30sp"
+            android:textSize="14sp"
             />
 
     </RelativeLayout>

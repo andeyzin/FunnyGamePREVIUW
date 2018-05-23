@@ -53,7 +53,7 @@ class Machine extends AsyncTask<String, Void, String> {
         switch(strings[0]){
             case "randomWord":
                 //------------------------------randomWord------------------------------------------
-                Document doc = null;
+                Document doc;
                 Elements els = null;
                 try {
                     doc = Jsoup.connect("https://kartaslov.ru/ассоциации-к-слову/" + strings[1].toLowerCase() + "/").get();

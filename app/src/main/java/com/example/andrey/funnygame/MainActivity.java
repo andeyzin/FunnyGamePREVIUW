@@ -52,7 +52,7 @@ public class MainActivity extends YouTubeBaseActivity{
 
     public static RVAdapter adapter;
     public static List<VideoMyClass> videoMyClass;
-    private static RecyclerView rv;
+    public static RecyclerView rv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,12 +103,13 @@ public class MainActivity extends YouTubeBaseActivity{
 
     private void initializeData(){
         videoMyClass = new ArrayList<>();
-        videoMyClass.add(new VideoMyClass("", null));
+        videoMyClass.add(new VideoMyClass(videoTitle, null, videoId));
     }
 
     private static void initializeAdapter(){
         adapter = new RVAdapter(videoMyClass);
         rv.setAdapter(adapter);
+        rv.scrollToPosition(0);
     }
 
 
@@ -196,23 +197,10 @@ public class MainActivity extends YouTubeBaseActivity{
             e.printStackTrace();
         }
 
-        videoMyClass.add(new VideoMyClass(videoTitle, preview));
+        videoMyClass.add(1, new VideoMyClass(videoTitle, preview, videoId));
 
+        startVideo();
         initializeAdapter();
-
-        player.initialize(apiKey, new YouTubePlayer.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) { if (!b) {
-                try {
-                    youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
-                    youTubePlayer.loadVideo(videoId);
-                } catch (Exception e) {
-                }
-            }}
-
-            @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {}
-        });
 
         // datebase
         try {
@@ -238,5 +226,24 @@ public class MainActivity extends YouTubeBaseActivity{
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public static void startVideo(){
+        player.initialize(apiKey, new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) { if (!b) {
+                try {
+                    youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
+                    youTubePlayer.loadVideo(videoId);
+                } catch (Exception e) {}
+            }}
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                Toast.makeText(context, youTubeInitializationResult.toString(), Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
     }
 }
