@@ -114,6 +114,9 @@ public class MainActivity extends YouTubeBaseActivity{
 
 
     public void onClick(View v) {
+        RVAdapter.lastTagValue = RVAdapter.BigViewHolder.tags.getSelectedItem().toString();
+        RVAdapter.lastDurValue = RVAdapter.BigViewHolder.duration.getSelectedItem().toString();
+
         switch(v.getId()){
             //
             //    GENERATE BUTTON
@@ -126,6 +129,15 @@ public class MainActivity extends YouTubeBaseActivity{
                 task = new Machine();
                 task.execute("randomWord", getTag(), getDuration());
                 break;
+
+            case R.id.space:
+                super.onStop();
+                super.onDestroy();
+                super.onCreate(Bundle.EMPTY);
+
+                task = new Machine();
+                task.execute("randomWord", videoId, getDuration());
+                break;
         }
 
     }
@@ -135,7 +147,6 @@ public class MainActivity extends YouTubeBaseActivity{
         switch (RVAdapter.BigViewHolder.tags.getSelectedItem().toString()){
             case  "Свой тег":
                 stringTag = RVAdapter.BigViewHolder.myTag .getText().toString();
-                Toast.makeText(context, stringTag, Toast.LENGTH_SHORT).show();
                 break;
             case "Без тега":
                 Random r = new Random();
@@ -216,8 +227,8 @@ public class MainActivity extends YouTubeBaseActivity{
                 int vide0IDIndex = cursor.getColumnIndex(DBHelper.KEY_VIDEO_ID);
                 int titleIndex = cursor.getColumnIndex(DBHelper.KEY_TITLE);
                 do {
-                    Toast.makeText(context, cursor.getString(vide0IDIndex), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(context, cursor.getString(titleIndex), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, cursor.getString(vide0IDIndex), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, cursor.getString(titleIndex), Toast.LENGTH_SHORT).show();
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -226,6 +237,16 @@ public class MainActivity extends YouTubeBaseActivity{
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public static int getIndex(Spinner spinner, String myString){
+        for (int i=0; i<spinner.getCount(); i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+
+        return 0;
     }
 
     public static void startVideo(){
@@ -239,11 +260,7 @@ public class MainActivity extends YouTubeBaseActivity{
             }}
 
             @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-                Toast.makeText(context, youTubeInitializationResult.toString(), Toast.LENGTH_SHORT).show();
-
-
-            }
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) { }
         });
     }
 }

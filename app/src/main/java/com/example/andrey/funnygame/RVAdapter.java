@@ -10,18 +10,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-
-import org.mortbay.jetty.Main;
-
 import java.util.List;
-
-import static com.example.andrey.funnygame.MainActivity.rv;
 
 
 public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -44,19 +38,12 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView videoTitle;
         ImageView previewImage;
 
-        VideoViewHolder(View itemView) {
+        VideoViewHolder(final View itemView) {
             super(itemView);
+            itemView.setTag(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             videoTitle = (TextView)itemView.findViewById(R.id.video_title);
             previewImage = (ImageView)itemView.findViewById(R.id.video_preview);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    MainActivity.videoId = MainActivity.videoMyClass.get(rv.getChildLayoutPosition(v)).videoId;
-                    MainActivity.startVideo();
-                }
-            });
-            itemView.setTag(itemView);
         }
     }
 
@@ -67,6 +54,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public static Spinner duration;
         public static Button gen;
         public static EditText myTag;
+        public static Space space;
 
         BigViewHolder(View itemView) {
             super(itemView);
@@ -75,8 +63,11 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tags = (Spinner) itemView.findViewById(R.id.tags);
             duration = (Spinner) itemView.findViewById(R.id.duration);
             gen = (Button) itemView.findViewById(R.id.gen);
+            space = (Space) itemView.findViewById(R.id.space);
             myTag = (EditText) itemView.findViewById(R.id.ownTag);
             myTag.setVisibility(View.INVISIBLE);
+            tags.setSelection(MainActivity.getIndex(tags, lastTagValue));
+            duration.setSelection(MainActivity.getIndex(duration, lastDurValue));
             tags.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                @Override
                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -119,7 +110,8 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
+        final int pos = position;
         switch (holder.getItemViewType()) {
             case TYPE_FIRST_ITEM:
                 BigViewHolder bigViewHolder = (BigViewHolder) holder;
@@ -128,6 +120,14 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case TYPE_ITEM:
                 ((VideoViewHolder)holder).videoTitle.setText(videoMyClass.get(position).title);
                 ((VideoViewHolder)holder).previewImage.setImageBitmap(videoMyClass.get(position).preview);
+                ((VideoViewHolder)holder).cv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.context, "You clicked "+ videoMyClass.get(pos).title, Toast.LENGTH_SHORT).show();
+                        MainActivity.videoId = MainActivity.videoMyClass.get(pos).videoId;
+                        RVAdapter.BigViewHolder.space.callOnClick();
+                    }
+                });
                 break;
 
         }
