@@ -116,6 +116,7 @@ public class MainActivity extends YouTubeBaseActivity{
     public void onClick(View v) {
         RVAdapter.lastTagValue = RVAdapter.BigViewHolder.tags.getSelectedItem().toString();
         RVAdapter.lastDurValue = RVAdapter.BigViewHolder.duration.getSelectedItem().toString();
+        RVAdapter.lastEdtValue = RVAdapter.BigViewHolder.myTag.getText().toString();
 
         switch(v.getId()){
             //

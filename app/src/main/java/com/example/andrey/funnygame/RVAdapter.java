@@ -26,6 +26,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static String lastTagValue;
     public static String lastDurValue;
+    public static String lastEdtValue;
 
     List<VideoMyClass> videoMyClass;
 
@@ -68,6 +69,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             myTag.setVisibility(View.INVISIBLE);
             tags.setSelection(MainActivity.getIndex(tags, lastTagValue));
             duration.setSelection(MainActivity.getIndex(duration, lastDurValue));
+            myTag.setText(lastEdtValue);
             tags.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                @Override
                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
